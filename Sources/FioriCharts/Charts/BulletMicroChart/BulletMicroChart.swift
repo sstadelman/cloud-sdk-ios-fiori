@@ -55,20 +55,23 @@ public struct BulletMicroChart: View {
     func backgroundView(in size: CGSize) -> some View {
         let chartHeight = size.height * 0.786
         return Rectangle()
-            .fill(Color.gray)
+            .fill(Color(red: 0.84, green: 0.85, blue: 0.86))
             .frame(width: size.width, height: chartHeight)
     }
     
     func forecastView(in size: CGSize) -> some View {
         let tmp = model.dataItemsIn(seriesIndex: 0)
         
+        let targetValue = tmp.count < 2 ? 0 : tmp[1].value
         let forecastValue = tmp.count < 3 ? 0 : tmp[2].value
         let chartHeight = size.height * 0.786
         let width = model.normalizedValue(for: forecastValue) * size.width
-        let height = chartHeight * 0.6
+        let height = chartHeight// * 0.6
+        
+        let color = forecastValue >= targetValue ? Color.green : Color.red
         
         return Rectangle()
-            .fill(Color(red: 0, green: 0, blue: 1.0, opacity: 0.3))
+            .fill(color.opacity(0.5))
             .frame(width: width, height: height)
         
     }
@@ -81,7 +84,7 @@ public struct BulletMicroChart: View {
         
         let chartHeight = size.height * 0.786
         var width = model.normalizedValue(for: actualValue) * size.width
-        let height = chartHeight * 0.6 * 0.6
+        let height = chartHeight * 0.6// * 0.6
         var x: CGFloat = 0
         
         if mode == BulletMicroChart.Mode.delta {
@@ -104,14 +107,14 @@ public struct BulletMicroChart: View {
         let y = (size.height - chartHeight) / 2
         let normalizedTargetValue = self.model.normalizedValue(for: targetValue)
         return ZStack {
-            LineShape(pos1: CGPoint(x: normalizedTargetValue * size.width, y: y - 3),
-                      pos2: CGPoint(x: normalizedTargetValue * size.width, y: y + chartHeight + 6))
+            LineShape(pos1: CGPoint(x: normalizedTargetValue * size.width, y: y - chartHeight * 0.07),
+                      pos2: CGPoint(x: normalizedTargetValue * size.width, y: y + chartHeight * 1.07))
                 .stroke(Color.black,
-                        style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .miter, miterLimit: 0, dash: [1, 1], dashPhase: 0))
+                        style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .miter, miterLimit: 0, dash: [1, 1], dashPhase: 0))
             
             LineShape(pos1: CGPoint(x: normalizedTargetValue * size.width - 2, y: y - 3),
-                      pos2: CGPoint(x: normalizedTargetValue * size.width - 2, y: y + chartHeight + 6))
-                .stroke(Color.white,
+                      pos2: CGPoint(x: normalizedTargetValue * size.width - 2, y: y + chartHeight * 1.1))
+                .stroke(Color.white.opacity(0.8),
                         style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .miter, miterLimit: 0, dash: [1, 1], dashPhase: 0))
         }
     }
@@ -119,12 +122,13 @@ public struct BulletMicroChart: View {
     func thresholdsView(size: CGSize, thresholds: [MicroChartDataItem]) -> some View {
         let chartHeight = size.height * 0.786
         let y = (size.height - chartHeight) / 2
+        
         return ZStack {
             ForEach(thresholds) {
-                LineShape(pos1: CGPoint(x: self.model.normalizedValue(for: $0.value) * size.width, y: y - 3),
-                          pos2: CGPoint(x: self.model.normalizedValue(for: $0.value) * size.width, y: y + chartHeight + 6))
+                LineShape(pos1: CGPoint(x: self.model.normalizedValue(for: $0.value) * size.width, y: y - chartHeight * 0.07),
+                          pos2: CGPoint(x: self.model.normalizedValue(for: $0.value) * size.width, y: y + chartHeight * 1.07))
                     .stroke($0.color.color(self.colorScheme),
-                            style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .miter, miterLimit: 0, dash: [1, 1], dashPhase: 0))
+                            style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .miter, miterLimit: 0, dash: [1, 1], dashPhase: 0))
             }
         }
     }
@@ -132,10 +136,23 @@ public struct BulletMicroChart: View {
 
 struct BulletMicroChart_Previews: PreviewProvider {
     static var previews: some View {
+//        Group {
+//            BulletMicroChart(Tests.bulletModles[0])
+//            BulletMicroChart(Tests.bulletModles[1])
+//        }
+//        /*
         Group {
-            ForEach(Tests.bulletModles) {
+            ForEach(Tests.bulletModels) {
                 BulletMicroChart($0)
                     .frame(width: 320, height: 94)
+            }
+            ForEach(Tests.bulletModels) {
+                BulletMicroChart($0)
+                    .frame(width: 320, height: 54)
+            }
+            ForEach(Tests.bulletModels) {
+                BulletMicroChart($0)
+                    .frame(width: 320, height: 18)
             }
         }
         .previewLayout(.fixed(width: 320, height: 94))

@@ -36,7 +36,7 @@ struct ContentView: View {
          ("Micro Chart - Column", Tests.columnModels, Tests.columnModelsDesc),
          ("Micro Chart - Radial", Tests.radialModels, Tests.radialModelsDesc),
          ("Micro Chart - Harvey Ball", Tests.harveyBallModels, Tests.harveyBallModelsDesc),
-         ("Micro Chart - Bullet", Tests.bulletModles, Tests.bulletModlesDesc)
+         ("Micro Chart - Bullet", Tests.bulletModels, Tests.bulletModlesDesc)
     ]
     
     var body: some View {

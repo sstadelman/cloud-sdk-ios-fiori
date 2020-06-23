@@ -93,7 +93,7 @@ public struct Tests {
     public static let lineModelsDesc = ["positive values, single series", "positive values, secondary y axis", "6 series, long category labels", "negative values, some x axis labels are nil, preselected single selection", "mixed values, preselected range selection", "mixed values 2, custom series attributes", "long x axis labels, label layout style is \"range\", preselected invalid selection", "nil values", "nil values 2", "data = [[nil]]", "data = [[]]"]
     
     /// bullet models for test
-    public static let bulletModles = [
+    public static let bulletModels = [
         ChartModel(chartType: .micro_bullet,
                    data: [[120, 100, 110], [0, 50, 150, 200]]),
         
@@ -231,7 +231,7 @@ public struct Tests {
     public static let stockModelsDesc = ["includes intraday: 1min, one day: 1min, 1year:1day, 3years:1week, last series is selected", "simple one", "intraday", "3 dimention data, first value is nil", "typical one", "data: [[nil]]", "data = [[]]"]
     
     /// all test models
-    public static let allCases = [stockModels, lineModels, donutModels, columnModels, harveyBallModels, radialModels, bulletModles].flatMap { $0 }
+    public static let allCases = [stockModels, lineModels, donutModels, columnModels, harveyBallModels, radialModels, bulletModels].flatMap { $0 }
 }
 
 extension NumberFormatter {
